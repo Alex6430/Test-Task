@@ -9,7 +9,7 @@ namespace Test_Task
 {
     class DB
     {
-        static string connectionString = @"Data Source=DESKTOP-UP524EV;Initial Catalog=TestTask;Integrated Security=True";
+        static string connectionString = @"Data Source=DESKTOP-UP524EV;Initial Catalog=TestTaskNew;Integrated Security=True";
         SqlConnection connection = new SqlConnection(connectionString);
     
         public void OpenConection()

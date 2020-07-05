@@ -59,6 +59,24 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MoneyForms.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MoneyForms.Designer.cs">
+      <DependentUpon>MoneyForms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MoneyOrderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MoneyOrderForm.Designer.cs">
+      <DependentUpon>MoneyOrderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PayForms.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PayForms.Designer.cs">
+      <DependentUpon>PayForms.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrationForm.cs">
@@ -72,6 +90,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MoneyForms.resx">
+      <DependentUpon>MoneyForms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MoneyOrderForm.resx">
+      <DependentUpon>MoneyOrderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PayForms.resx">
+      <DependentUpon>PayForms.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

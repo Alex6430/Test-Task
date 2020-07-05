@@ -33,7 +33,7 @@ namespace Test_Task
 
             try
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Users WHERE UsersLogin= @LoginUser AND Pass= @PassUser", db.GetConnection());
+                SqlCommand command = new SqlCommand("SELECT * FROM Users WHERE UsersLogin= @LoginUser AND UsersPass= @PassUser", db.GetConnection());
                 command.Parameters.Add("@LoginUser", SqlDbType.NVarChar).Value = LoginUser;
                 command.Parameters.Add("@PassUser", SqlDbType.NVarChar).Value = PassUser;
                 adapter.SelectCommand = command;
@@ -48,8 +48,8 @@ namespace Test_Task
             if (table.Rows.Count > 0)
             {
                 this.Hide();
-                MainForm mainForm = new MainForm();
-                mainForm.Show();
+                MoneyForms moneyForms = new MoneyForms();
+                moneyForms.Show();                
             }
             else
             {

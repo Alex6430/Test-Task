@@ -45,7 +45,7 @@ namespace Test_Task
 
             try
             {
-                SqlCommand command = new SqlCommand("INSERT INTO Users ( UsersName, Phone, UsersLogin, Pass ) VALUES (@Name, @Phone, @Login, @Pass)", db.GetConnection());
+                SqlCommand command = new SqlCommand("INSERT INTO Users ( UsersName, UsersPhone, UsersLogin, UsersPass ) VALUES (@Name, @Phone, @Login, @Pass)", db.GetConnection());
                 if (NameFild.Text != "Введите имя")
                 {
                     command.Parameters.Add("@Name", SqlDbType.NVarChar).Value = NameFild.Text;
@@ -89,8 +89,8 @@ namespace Test_Task
                 {
                     //MessageBox.Show("вы успешно зарегестрированы");
                     this.Hide();
-                    MainForm mainForm = new MainForm();
-                    mainForm.Show();
+                    MoneyForms moneyForms = new MoneyForms();
+                    moneyForms.Show();                    
                 }
                 else
                     MessageBox.Show("вы не зарегестрированы");
