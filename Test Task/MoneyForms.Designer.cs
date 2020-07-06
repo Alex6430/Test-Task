@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.button_enter = new System.Windows.Forms.Button();
             this.MoneysFild = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -50,6 +50,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(332, 257);
             this.panel1.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 28F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(267, 117);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(77, 64);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "р.";
             // 
             // button_enter
             // 
@@ -96,16 +106,6 @@
             this.label1.Text = "введите сумму для оплаты заказа\r\n";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 28F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(267, 117);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 64);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "р.";
-            // 
             // MoneyForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -114,6 +114,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "MoneyForms";
             this.Text = "MoneyForms";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MoneyForms_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

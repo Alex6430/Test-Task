@@ -15,18 +15,20 @@ namespace Test_Task
     {
         private string Cell;
         private string Summ;
-               
+        private string PaysId;
+
         public MoneyOrderForm()
         {
             InitializeComponent();
         }
 
-        public MoneyOrderForm(string cell, string summ)
+        public MoneyOrderForm(string cell, string summ, string paysId)
         {
             InitializeComponent();
             label1.Text = label1.Text + " ( " + summ + " )";
             Cell = cell;
             Summ = summ;
+            PaysId = paysId;
         }
 
         private void button_enter_Click(object sender, EventArgs e)
@@ -34,14 +36,17 @@ namespace Test_Task
             string moneys = MoneysFild.Text;
             string cell_value = Cell;
             string summ_value = Summ;
+            string paysId_value = PaysId;
             //MessageBox.Show(cell_value + "," + summ_value);
+            MessageBox.Show(paysId_value);
 
             DB db = new DB();
 
             db.OpenConection();
             try
             {
-                SqlCommand command = new SqlCommand("SELECT top 1 PaysSumm FROM Pays order by PaysId desc", db.GetConnection());
+                SqlCommand command = new SqlCommand("SELECT top 1 PaysSumm FROM Pays where PaysId = @Id", db.GetConnection());
+                command.Parameters.Add("@Id", SqlDbType.Int).Value = Convert.ToInt32(PaysId);
                 SqlDataReader dataReader = command.ExecuteReader();
                 while (dataReader.Read())
                 {
@@ -49,10 +54,18 @@ namespace Test_Task
                     {
                         MessageBox.Show("недостаточно денег");
                         this.Hide();
-                        MainForm mainForm1 = new MainForm();
+                        MainForm mainForm1 = new MainForm(PaysId);
                         mainForm1.Show();
                         return;
-                    }                    
+                    }
+                    else if (Convert.ToDecimal(moneys) > Convert.ToDecimal(summ_value))
+                    {
+                        MessageBox.Show("заказ стоит меньше введите коректную сумму");
+                        this.Hide();
+                        MainForm mainForm1 = new MainForm(PaysId);
+                        mainForm1.Show();
+                        return;
+                    }
                 }
             }
             catch (Exception exp)
@@ -66,9 +79,10 @@ namespace Test_Task
             
             try
             {                
-                SqlCommand command = new SqlCommand("INSERT INTO Moneys (OrdersId, PaysId, MoneysSumm) VALUES (@OId,(SELECT top 1 PaysId FROM Pays order by PaysId desc),@Summ)", db.GetConnection());
+                SqlCommand command = new SqlCommand("INSERT INTO Moneys (OrdersId, PaysId, MoneysSumm) VALUES (@OId,@PId,@Summ)", db.GetConnection());
                 command.Parameters.Add("@Summ", SqlDbType.Money).Value = moneys;
                 command.Parameters.Add("@OId", SqlDbType.Int).Value = Convert.ToInt32(cell_value);
+                command.Parameters.Add("@PId", SqlDbType.Int).Value = Convert.ToInt32(PaysId);
                 command.ExecuteNonQuery();
             }
             catch (Exception exp)
@@ -94,7 +108,7 @@ namespace Test_Task
             db.CloseConection();
 
             this.Hide();
-            MainForm mainForm = new MainForm();
+            MainForm mainForm = new MainForm(PaysId);
             mainForm.Show();
         }
 

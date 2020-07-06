@@ -40,6 +40,39 @@ namespace Test_Task
             
         }
 
+        private string PaysId;
+
+        public MainForm(string str)
+        {
+            InitializeComponent();
+
+            DB db = new DB();
+
+            PaysId = str;
+            MessageBox.Show(str);
+
+            db.OpenConection();
+            try
+            {
+                SqlCommand command = new SqlCommand("SELECT top 1 PaysSumm FROM Pays where PaysId = @Id", db.GetConnection());
+                command.Parameters.Add("@Id", SqlDbType.Int).Value = Convert.ToInt32(str);
+                SqlDataReader dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    Ostatok.Text = dataReader[0].ToString();
+                }
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.ToString());
+                this.Close();
+            }
+            db.CloseConection();
+
+            DisplayData();
+
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
@@ -58,7 +91,7 @@ namespace Test_Task
 
             try
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Orders where OrdersSumm != 0", db.GetConnection());
+                SqlCommand command = new SqlCommand("SELECT * FROM Orders where OrdersSumm > 0", db.GetConnection());
                 //command.Parameters.Add("@LoginUser", SqlDbType.NVarChar).Value = LoginUser;
                 //command.Parameters.Add("@PassUser", SqlDbType.NVarChar).Value = PassUser;
                 adapter.SelectCommand = command;
@@ -115,7 +148,7 @@ namespace Test_Task
             //MessageBox.Show(cell_value +","+ summ_value);
 
             this.Hide();
-            MoneyOrderForm moneyOrderForm = new MoneyOrderForm(cell_value , summ_value);            
+            MoneyOrderForm moneyOrderForm = new MoneyOrderForm(cell_value , summ_value, PaysId);            
             moneyOrderForm.Show();
                                
 

@@ -49,17 +49,17 @@ namespace Test_Task
                 if (command.ExecuteNonQuery() == 1)
                 {
                     //MessageBox.Show("вы успешно зарегестрированы");
-                    //SqlCommand command1 = new SqlCommand("SELECT top 1 PaysSumm FROM Pays order by PaysId desc", db.GetConnection());
-                    //SqlDataReader dataReader = command1.ExecuteReader();
-                    //while (dataReader.Read())
-                    //{
-                    //    this.Hide();
-                    //    MainForm mainForm = new MainForm(dataReader[0].ToString());
-                    //    mainForm.Show();                        
-                    //}
-                    this.Hide();
-                    MainForm mainForm = new MainForm();
-                    mainForm.Show();
+                    SqlCommand command1 = new SqlCommand("SELECT top 1 PaysId FROM Pays order by PaysId desc", db.GetConnection());
+                    SqlDataReader dataReader = command1.ExecuteReader();
+                    while (dataReader.Read())
+                    {
+                        this.Hide();
+                        MainForm mainForm = new MainForm(dataReader[0].ToString());
+                        mainForm.Show();
+                    }
+                    //this.Hide();
+                    //MainForm mainForm = new MainForm();
+                    //mainForm.Show();
 
                 }
                 else
@@ -67,13 +67,18 @@ namespace Test_Task
 
                 db.CloseConection();
             }
-            catch (Exception exp)
+            catch(DBConcurrencyException exp)
             {
                 MessageBox.Show(exp.ToString());
                 this.Close();
-            }          
+            }              
 
 
+        }
+
+        private void MoneyForms_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
