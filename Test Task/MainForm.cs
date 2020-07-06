@@ -83,12 +83,25 @@ namespace Test_Task
         
         private void button_enter_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow.Index == dataGridView1.RowCount)
+            try
             {
-                MessageBox.Show("Строка не выделена");
+                if (dataGridView1.CurrentRow == null)
+                {
+                    MessageBox.Show("нет заказов для оплаты");
+                    return;
+                }
+                else if (dataGridView1.CurrentRow.Index == dataGridView1.RowCount)
+                {
+                    MessageBox.Show("Строка не выделена");
+                    return;
+                }
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show("нет заказов для оплаты");
                 return;
             }
-            
+
             string cell_value = dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells["OrdersId"].Value.ToString();           
 
             string summ_value = dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells["OrdersSumm"].Value.ToString();

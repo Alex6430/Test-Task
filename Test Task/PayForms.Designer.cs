@@ -73,6 +73,7 @@
             this.button_enter.TabIndex = 5;
             this.button_enter.Text = "оплатить";
             this.button_enter.UseVisualStyleBackColor = false;
+            this.button_enter.Click += new System.EventHandler(this.button_enter_Click);
             // 
             // panel2
             // 

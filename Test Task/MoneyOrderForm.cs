@@ -39,34 +39,57 @@ namespace Test_Task
             DB db = new DB();
 
             db.OpenConection();
-
             try
             {
-                SqlCommand command = new SqlCommand("INSERT INTO Moneys (OrdersId, PaysId, MoneysSumm) VALUES (@OId,(SELECT top 1 PaysId FROM Pays order by PaysId desc),@Summ)", db.GetConnection());
+                SqlCommand command = new SqlCommand("SELECT top 1 PaysSumm FROM Pays order by PaysId desc", db.GetConnection());
+                SqlDataReader dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    if(Convert.ToDecimal(moneys) > Convert.ToDecimal(dataReader[0].ToString()))
+                    {
+                        MessageBox.Show("недостаточно денег");
+                        this.Hide();
+                        MainForm mainForm1 = new MainForm();
+                        mainForm1.Show();
+                        return;
+                    }                    
+                }
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.ToString());
+                this.Close();
+            }
+            db.CloseConection();
 
+            db.OpenConection();
+            
+            try
+            {                
+                SqlCommand command = new SqlCommand("INSERT INTO Moneys (OrdersId, PaysId, MoneysSumm) VALUES (@OId,(SELECT top 1 PaysId FROM Pays order by PaysId desc),@Summ)", db.GetConnection());
                 command.Parameters.Add("@Summ", SqlDbType.Money).Value = moneys;
                 command.Parameters.Add("@OId", SqlDbType.Int).Value = Convert.ToInt32(cell_value);
                 command.ExecuteNonQuery();
             }
             catch (Exception exp)
             {
-                MessageBox.Show(exp.ToString());
+                MessageBox.Show(exp.ToString());               
                 this.Close();
             }            
 
-            try
-            {
-                SqlCommand command1 = new SqlCommand("UPDATE Orders SET OrdersSumm = OrdersSumm - @summ , OrdersSummPay = OrdersSummPay + @summ where OrdersId = @Id", db.GetConnection());
+            //try
+            //{
+            //    SqlCommand command1 = new SqlCommand("UPDATE Orders SET OrdersSumm = OrdersSumm - @summ , OrdersSummPay = OrdersSummPay + @summ where OrdersId = @Id", db.GetConnection());
 
-                command1.Parameters.Add("@Summ", SqlDbType.Money).Value = moneys;
-                command1.Parameters.Add("@Id", SqlDbType.Int).Value = Convert.ToInt32(cell_value);
-                command1.ExecuteNonQuery();
-            }
-            catch (Exception exp)
-            {
-                MessageBox.Show(exp.ToString());
-                this.Close();
-            }
+            //    command1.Parameters.Add("@Summ", SqlDbType.Money).Value = moneys;
+            //    command1.Parameters.Add("@Id", SqlDbType.Int).Value = Convert.ToInt32(cell_value);
+            //    command1.ExecuteNonQuery();
+            //}
+            //catch (Exception exp)
+            //{
+            //    MessageBox.Show(exp.ToString());
+            //    this.Close();
+            //}
             
             db.CloseConection();
 

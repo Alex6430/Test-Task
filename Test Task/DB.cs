@@ -15,13 +15,18 @@ namespace Test_Task
         public void OpenConection()
         {
             if (connection.State == System.Data.ConnectionState.Closed)
-                connection.Open();
+                connection.Open();                
         }
 
         public void CloseConection()
         {
             if (connection.State == System.Data.ConnectionState.Open)
                 connection.Close();
+        }
+
+        public SqlTransaction GetTransaction()
+        {
+            return connection.BeginTransaction();
         }
 
         public SqlConnection GetConnection()

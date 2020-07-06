@@ -57,9 +57,9 @@
             this.button_enter.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button_enter.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button_enter.ForeColor = System.Drawing.Color.Red;
-            this.button_enter.Location = new System.Drawing.Point(61, 187);
+            this.button_enter.Location = new System.Drawing.Point(44, 187);
             this.button_enter.Name = "button_enter";
-            this.button_enter.Size = new System.Drawing.Size(214, 58);
+            this.button_enter.Size = new System.Drawing.Size(239, 58);
             this.button_enter.TabIndex = 5;
             this.button_enter.Text = "продолжить";
             this.button_enter.UseVisualStyleBackColor = false;
