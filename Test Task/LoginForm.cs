@@ -47,9 +47,12 @@ namespace Test_Task
 
             if (table.Rows.Count > 0)
             {
-                this.Hide();
-                MoneyForms moneyForms = new MoneyForms();
-                moneyForms.Show();                
+                this.Visible = false;
+                ChoosePaysForm choosePaysForm = new ChoosePaysForm();
+                if(choosePaysForm.ShowDialog() == DialogResult.Cancel)
+                {
+                    this.Close();
+                }                
             }
             else
             {
@@ -77,9 +80,15 @@ namespace Test_Task
 
         private void RegLabel_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            //this.Hide();
+            this.Visible = false;
             RegistrationForm registrationForm = new RegistrationForm();
-            registrationForm.Show();
+            registrationForm.ShowDialog();
+            this.Visible = true;
+            //if(registrationForm.ShowDialog() == DialogResult.Cancel)
+            //{
+            //    this.Close();
+            //}
         }
 
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)

@@ -49,7 +49,7 @@ namespace Test_Task
             DB db = new DB();
 
             PaysId = str;
-            MessageBox.Show(str);
+            //MessageBox.Show(str);
 
             db.OpenConection();
             try
@@ -75,7 +75,7 @@ namespace Test_Task
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            //Application.Exit();
         }
 
         private void DisplayData()
@@ -112,6 +112,23 @@ namespace Test_Task
                 MessageBox.Show(exp.ToString());
                 this.Close();
             }
+            db.OpenConection();
+            try
+            {
+                SqlCommand command = new SqlCommand("SELECT top 1 PaysSumm FROM Pays where PaysId = @Id", db.GetConnection());
+                command.Parameters.Add("@Id", SqlDbType.Int).Value = Convert.ToInt32(PaysId);
+                SqlDataReader dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    Ostatok.Text = dataReader[0].ToString();
+                }
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.ToString());
+                this.Close();
+            }
+            db.CloseConection();
         }
         
         private void button_enter_Click(object sender, EventArgs e)
@@ -147,19 +164,21 @@ namespace Test_Task
 
             //MessageBox.Show(cell_value +","+ summ_value);
 
-            this.Hide();
+            //this.Hide();
             MoneyOrderForm moneyOrderForm = new MoneyOrderForm(cell_value , summ_value, PaysId);            
-            moneyOrderForm.Show();
-                               
-
-            //DisplayData();
+            moneyOrderForm.ShowDialog();                        
+            DisplayData();
         }
 
         private void label2_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            PayForms payForm = new PayForms();
-            payForm.Show();
+            //this.Hide();
+            PayForms payForm = new PayForms(PaysId);
+            //payForm.ShowDialog();
+            if (payForm.ShowDialog() == DialogResult.OK)
+            {
+                this.Close();
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)

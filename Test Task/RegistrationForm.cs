@@ -33,7 +33,7 @@ namespace Test_Task
         private void button_enter_Click(object sender, EventArgs e)
         {
             this.Close();
-            new LoginForm();            
+            //new LoginForm();            
         }
 
         private void button_reg_Click(object sender, EventArgs e)
@@ -88,9 +88,10 @@ namespace Test_Task
                 if (command.ExecuteNonQuery() == 1)
                 {
                     //MessageBox.Show("вы успешно зарегестрированы");
-                    this.Hide();
+                    //this.Hide();
                     MoneyForms moneyForms = new MoneyForms();
-                    moneyForms.Show();                    
+                    moneyForms.ShowDialog();
+                    this.Close();
                 }
                 else
                     MessageBox.Show("вы не зарегестрированы");
@@ -250,14 +251,18 @@ namespace Test_Task
 
         private void label2_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            LoginForm loginForm = new LoginForm();
-            loginForm.Show();
+            //this.Hide();
+            //LoginForm loginForm = new LoginForm();
+            //loginForm.ShowDialog();
+            //this.;
+            this.Close();
+            
+            
         }
 
         private void RegistrationForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            //Application.Exit();
         }
     }
 }

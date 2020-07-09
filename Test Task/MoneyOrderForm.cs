@@ -38,7 +38,7 @@ namespace Test_Task
             string summ_value = Summ;
             string paysId_value = PaysId;
             //MessageBox.Show(cell_value + "," + summ_value);
-            MessageBox.Show(paysId_value);
+            //MessageBox.Show(paysId_value);
 
             DB db = new DB();
 
@@ -52,18 +52,12 @@ namespace Test_Task
                 {
                     if(Convert.ToDecimal(moneys) > Convert.ToDecimal(dataReader[0].ToString()))
                     {
-                        MessageBox.Show("недостаточно денег");
-                        this.Hide();
-                        MainForm mainForm1 = new MainForm(PaysId);
-                        mainForm1.Show();
+                        MessageBox.Show("недостаточно денег");                        
                         return;
                     }
                     else if (Convert.ToDecimal(moneys) > Convert.ToDecimal(summ_value))
                     {
-                        MessageBox.Show("заказ стоит меньше введите коректную сумму");
-                        this.Hide();
-                        MainForm mainForm1 = new MainForm(PaysId);
-                        mainForm1.Show();
+                        MessageBox.Show("заказ стоит меньше введите коректную сумму");                        
                         return;
                     }
                 }
@@ -75,46 +69,43 @@ namespace Test_Task
             }
             db.CloseConection();
 
-            db.OpenConection();
-            
+            db.OpenConection();            
             try
             {                
-                SqlCommand command = new SqlCommand("INSERT INTO Moneys (OrdersId, PaysId, MoneysSumm) VALUES (@OId,@PId,@Summ)", db.GetConnection());
+                SqlCommand command = new SqlCommand(
+                    "BEGIN" +
+                    " IF NOT EXISTS(SELECT * FROM Moneys WHERE OrdersId = @OId AND MoneysSumm > 0)" +
+                    " BEGIN" +
+                    " INSERT INTO Moneys(OrdersId, PaysId, MoneysSumm) VALUES(@OId, @PId, @Summ)" +
+                    " END" +
+                    " END", db.GetConnection());
                 command.Parameters.Add("@Summ", SqlDbType.Money).Value = moneys;
                 command.Parameters.Add("@OId", SqlDbType.Int).Value = Convert.ToInt32(cell_value);
                 command.Parameters.Add("@PId", SqlDbType.Int).Value = Convert.ToInt32(PaysId);
-                command.ExecuteNonQuery();
+                if (command.ExecuteNonQuery() != 3)
+                {
+                    MessageBox.Show("этот заказ оплачивается подождите");
+                }
             }
             catch (Exception exp)
             {
                 MessageBox.Show(exp.ToString());               
                 this.Close();
-            }            
-
-            //try
-            //{
-            //    SqlCommand command1 = new SqlCommand("UPDATE Orders SET OrdersSumm = OrdersSumm - @summ , OrdersSummPay = OrdersSummPay + @summ where OrdersId = @Id", db.GetConnection());
-
-            //    command1.Parameters.Add("@Summ", SqlDbType.Money).Value = moneys;
-            //    command1.Parameters.Add("@Id", SqlDbType.Int).Value = Convert.ToInt32(cell_value);
-            //    command1.ExecuteNonQuery();
-            //}
-            //catch (Exception exp)
-            //{
-            //    MessageBox.Show(exp.ToString());
-            //    this.Close();
-            //}
+            }  
+                    
             
             db.CloseConection();
 
-            this.Hide();
-            MainForm mainForm = new MainForm(PaysId);
-            mainForm.Show();
+            //this.Hide();
+            //MainForm mainForm = new MainForm(PaysId);
+            //mainForm.ShowDialog();
+            
+            this.Close();
         }
 
         private void MoneyOrderForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            //Application.Exit();
         }
     }
 }

@@ -11,19 +11,9 @@ using System.Windows.Forms;
 
 namespace Test_Task
 {
-    public partial class PayForms : Form
+    public partial class ChoosePaysForm : Form
     {
-
-        private string PaysId;
-
-        public PayForms(string paysId)
-        {
-            InitializeComponent();         
-            PaysId = paysId;
-            DisplayData();
-        }
-
-        public PayForms()
+        public ChoosePaysForm()
         {
             InitializeComponent();
             DisplayData();
@@ -42,8 +32,8 @@ namespace Test_Task
 
             try
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Moneys where PaysId = @PId and MoneysSumm > 0", db.GetConnection());
-                command.Parameters.Add("@PId", SqlDbType.Int).Value = Convert.ToInt32(PaysId);
+                SqlCommand command = new SqlCommand("SELECT * FROM Pays where PaysSumm > 0", db.GetConnection());
+                //command.Parameters.Add("@LoginUser", SqlDbType.NVarChar).Value = LoginUser;
                 //command.Parameters.Add("@PassUser", SqlDbType.NVarChar).Value = PassUser;
                 adapter.SelectCommand = command;
                 adapter.Fill(dataSet);
@@ -55,10 +45,10 @@ namespace Test_Task
                 //dataGridView1.Columns["OrdersDate"].ReadOnly = true;
                 //dataGridView1.Columns["PaysId"].Visible = false;
                 //dataGridView1.Columns["MoneysId"].Visible = false;
-                dataGridView1.Columns["MoneysId"].Visible = false;
-                dataGridView1.Columns["OrdersId"].HeaderText = "Номер заказа";
+                //dataGridView1.Columns["PaysId"].Visible = false;
                 dataGridView1.Columns["PaysId"].HeaderText = "Номер платежа";
-                dataGridView1.Columns["MoneysSumm"].HeaderText = "сумма оплаты";
+                dataGridView1.Columns["PaysDate"].HeaderText = "дата платежа";
+                dataGridView1.Columns["PaysSumm"].HeaderText = "сумма на счету";
                 dataGridView1.ReadOnly = true;
             }
             catch (Exception exp)
@@ -68,45 +58,52 @@ namespace Test_Task
             }
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-            //this.Hide();
-            //MainForm mainForm  = new MainForm();
-            //mainForm.Show();
-            this.Close();
-        }
-
-        private void PayForms_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //Application.Exit();
-        }
-
         private void button_enter_Click(object sender, EventArgs e)
         {
-            //this.Hide();
-            //MoneyForms moneyForms = new MoneyForms();
-            //moneyForms.Show();
-            DB db = new DB();
-            db.OpenConection();
             try
             {
-                SqlCommand command = new SqlCommand("UPDATE Moneys SET MoneysSumm = 0 where PaysId = @PId", db.GetConnection());
-                command.Parameters.Add("@PId", SqlDbType.Int).Value = Convert.ToInt32(PaysId);
-                command.ExecuteNonQuery();
+                if (dataGridView1.CurrentRow == null)
+                {
+                    MessageBox.Show("нет платежей с деньгами");
+                    return;
+                }
+                else if (dataGridView1.CurrentRow.Index == dataGridView1.RowCount)
+                {
+                    MessageBox.Show("Строка не выделена");
+                    return;
+                }
             }
             catch (Exception exp)
             {
-                MessageBox.Show(exp.ToString());
-                this.Close();
+                MessageBox.Show("ошибка");
+                return;
             }
-            db.CloseConection();
-            //DisplayData();
-            button_enter.DialogResult = DialogResult.OK;
+
+            string cell_value = dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells["PaysId"].Value.ToString();
+
+            string summ_value = dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells["PaysSumm"].Value.ToString();
+
+            //button_enter.DialogResult = DialogResult.OK;
+            this.Visible = false;
+            
+            MainForm mainForm = new MainForm(cell_value);
+            mainForm.ShowDialog();
+
+            this.Visible = true;
+            DisplayData();
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
+            //button_add_pay.DialogResult = DialogResult.No;
+            MoneyForms moneyForms = new MoneyForms();
+            moneyForms.ShowDialog();
+            DisplayData();
+        }
 
+        private void label2_Click(object sender, EventArgs e)
+        {
+            this.Close();            
         }
     }
 }
