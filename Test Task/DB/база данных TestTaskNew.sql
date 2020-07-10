@@ -36,24 +36,21 @@ CREATE TABLE Users
     UsersPass NVARCHAR(20)  NOT NULL
 );
 
-SELECT top 1 PaysSumm FROM Pays order by PaysId desc
 
-USE TestTaskNew
+USE [TestTaskNew]
 GO
-CREATE TRIGGER Moneys_Insert_Pays
-ON Moneys
+CREATE TRIGGER [Moneys_Insert_Pays]
+ON [Moneys]
 AFTER INSERT
 AS
 UPDATE Pays
-SET PaysSumm = PaysSumm - (select Top 1 MoneysSumm From Moneys order by MoneysId desc) where PaysId = (select top 1 PaysId From Moneys order by MoneysId desc)
+SET PaysSumm = PaysSumm - (select MoneysSumm From inserted) where PaysId = (select PaysId From inserted)
+
 
 GO
-CREATE TRIGGER Moneys_Insert_Orders
-ON Moneys
+CREATE TRIGGER [Moneys_Insert_Orders]
+ON [Moneys]
 AFTER INSERT
 AS
 UPDATE Orders
-SET OrdersSumm = OrdersSumm - (select Top 1 MoneysSumm From Moneys order by MoneysId desc), OrdersSummPay = OrdersSummPay + (select Top 1 MoneysSumm From Moneys order by MoneysId desc)  where OrdersId = (select top 1 OrdersId From Moneys order by MoneysId desc)
-
-
-
+SET OrdersSumm = OrdersSumm - (select MoneysSumm From INSERTED) , OrdersSummPay = OrdersSummPay + (select MoneysSumm From inserted)  where OrdersId = (select OrdersId From inserted)
